@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Model checkpoints and outputs (large files)
+outputs/
+fine_tuned_model/
+*.safetensors
+*.bin
+*.pt
+*.ckpt
+
+# Dataset files (too large for git)
+*.json
+*.json.gz
+*.jsonl
+*.parquet
+*.csv
+*.tsv
+trn.json
+trn.json.gz
+
+# Logs
+*.log
+wandb/
+runs/
+lightning_logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Secrets
+.env.local
+secrets.json
