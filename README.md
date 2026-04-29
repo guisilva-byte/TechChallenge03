@@ -83,6 +83,8 @@ Download the dataset and place `trn.json.gz` in your Google Drive before running
 !python main.py
 ```
 
+> **To run the full pipeline:** upload `main.py` to Google Colab and execute it there with the dataset already placed in your Google Drive.
+
 ### Local (conda)
 
 > Note: local execution requires a CUDA-capable GPU with ≥ 16 GB VRAM.

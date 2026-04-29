@@ -14,9 +14,17 @@ import json
 import torch
 
 from datasets import Dataset
-from unsloth import FastLanguageModel, is_bfloat16_supported
-from trl import SFTTrainer
 from transformers import TrainingArguments
+
+# Unsloth is only available on Linux + CUDA (e.g. Google Colab).
+# Importing it on Windows or CPU-only machines will raise an ImportError.
+try:
+    from unsloth import FastLanguageModel, is_bfloat16_supported
+    from trl import SFTTrainer
+    UNSLOTH_AVAILABLE = True
+except ImportError:
+    UNSLOTH_AVAILABLE = False
+    print("Warning: unsloth not available — training and LoRA features disabled.")
 
 # ─────────────────────────────────────────────
 # Configuration
@@ -123,7 +131,10 @@ def build_dataset(records: list[dict]) -> tuple[Dataset, Dataset]:
 # ─────────────────────────────────────────────
 
 def load_base_model():
-    """Load the quantized base model and tokenizer via Unsloth."""
+    """Load the quantized base model and tokenizer via Unsloth (requires CUDA)."""
+    if not UNSLOTH_AVAILABLE:
+        raise RuntimeError("Unsloth is not available. Run this on Google Colab with a GPU.")
+
     print(f"Loading base model: {MODEL_NAME}")
     model, tokenizer = FastLanguageModel.from_pretrained(
         MODEL_NAME,
@@ -251,6 +262,11 @@ def fine_tune(model, tokenizer, tokenized_train: Dataset) -> None:
 # ─────────────────────────────────────────────
 
 def main():
+    if not UNSLOTH_AVAILABLE:
+        print("Cannot run full pipeline: unsloth is not installed.")
+        print("Please run this script on Google Colab with a GPU.")
+        return
+
     print("GPU available:", torch.cuda.is_available())
 
     # 1. Mount drive and decompress dataset
